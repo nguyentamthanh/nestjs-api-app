@@ -9,12 +9,17 @@ datasource db {
 
 model User {
     id             Int      @id @default(autoincrement())
-    email          String
+    email          String   @unique
     hashedPassWord String
-    firstName      String
-    lastName       String
+    firstName      String? //can be null
+    lastName       String?
     createdAt      DateTime @default(now())
     updatedAt      DateTime @default(now())
+
+    //relationship
+    note Note[]
+
+    @@map("users") //users id table name in posgres sql
 }
 
 model Note {
@@ -24,4 +29,9 @@ model Note {
     url         String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now())
+
+    userId Int
+    User   User @relation(fields: [userId], references: [id])
+
+    @@map("notes")
 }
